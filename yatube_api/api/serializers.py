@@ -56,8 +56,8 @@ class CommentSerializer(serializers.ModelSerializer):
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         slug_field='username',
-        queryset=serializers.CurrentUserDefault(),
-        required=False
+        default=serializers.CurrentUserDefault(),
+        read_only=True
     )
     following = serializers.SlugRelatedField(
         slug_field='username',
@@ -76,6 +76,3 @@ class FollowSerializer(serializers.ModelSerializer):
                 fields=('user', 'following')
             )
         ]
-
-    def get_following(self, obj):
-        return obj.user != obj.following
