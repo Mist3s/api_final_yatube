@@ -16,7 +16,6 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-        read_only_fields = ('author',)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -37,10 +36,6 @@ class CommentSerializer(serializers.ModelSerializer):
         queryset=serializers.CurrentUserDefault(),
         required=False
     )
-    post = serializers.PrimaryKeyRelatedField(
-        read_only=True,
-        default=Post.objects.all()
-    )
 
     class Meta:
         model = Comment
@@ -51,6 +46,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'text',
             'created'
         )
+        read_only_fields = ('post',)
 
 
 class FollowSerializer(serializers.ModelSerializer):

@@ -22,10 +22,14 @@ class PostViewSet(viewsets.ModelViewSet):
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user
+        )
 
     def perform_update(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user
+        )
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -48,7 +52,7 @@ class CommentViewSet(viewsets.ModelViewSet):
             Post,
             pk=self.kwargs.get('post_id')
         )
-        return post.comments
+        return post.comments.all()
 
     def perform_create(self, serializer):
         post = get_object_or_404(
@@ -76,10 +80,14 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user
+        )
 
     def perform_update(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(
+            author=self.request.user
+        )
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -98,7 +106,12 @@ class FollowViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
     def get_queryset(self):
-        return Follow.objects.filter(user=self.request.user)
+        return Follow.objects.filter(
+            user=self.request.user
+        )
