@@ -2,10 +2,9 @@ from rest_framework import viewsets, permissions, filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
-
-from posts.models import Post, Group, Comment, Follow
 from rest_framework.response import Response
 
+from posts.models import Post, Group, Comment, Follow
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (
     PostSerializer, CommentSerializer,
@@ -92,7 +91,10 @@ class FollowViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.data.get('following') == request.user.username:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                'Попытка подписаться на самого себя.',
+                status=status.HTTP_400_BAD_REQUEST
+            )
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
