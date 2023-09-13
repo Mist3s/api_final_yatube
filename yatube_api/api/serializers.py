@@ -60,6 +60,8 @@ class FollowSerializer(serializers.ModelSerializer):
             'user',
             'following',
         )
+        # По причине не корректной работы UniqueConstraint в
+        # DRF 3.12, дополнительно используем UniqueTogetherValidator
         validators = [
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
